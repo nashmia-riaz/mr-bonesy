@@ -28,7 +28,8 @@ void AMyPlayer::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 	if (OtherActor && (OtherActor != this) && OtherComp) {
 		if (OtherActor->ActorHasTag("SplinePoint"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Hit spline point: %f, %f, %f"), OtherActor->GetActorLocation().X, OtherActor->GetActorLocation().Y, OtherActor->GetActorLocation().Z);
+			APoint* point = (APoint*) OtherActor;
+			UE_LOG(LogTemp, Warning, TEXT("[Player] Hit point (%f, %f, %f) has obstacle reference %d"), point->position.X, point->position.Y, point->position.Z, point->obsPointRef != nullptr);
 		}
 	}
 }

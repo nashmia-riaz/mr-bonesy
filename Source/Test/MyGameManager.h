@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MyCharacter.h"
+#include "Point.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "list"
@@ -36,24 +37,26 @@ public:
 	float currentTimeInSpline= 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float lastIncrementTime = 0;
+	int currentIteration = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FVector> splinePoints;
+	TArray<APoint*> splinePoints;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> splinePointBP;
+	TSubclassOf<APoint> splinePointBP;
+
+	//we use this to create the planet
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	APlanetGenerator* planetGenerator;
 
 private:
 	int maxRand = 300; int minRand = 50;
-	void CreateSpline();
 	FVector currentPoint = FVector(0, 0, 0);
 	
 	float simulationSpeed = 10;
-	FVector GenerateRandomPoint(FVector pointRef);
-	void GeneratePointOnPos(FVector pos);
-	void GenerateNextPointInSplint();
+	void CreateRandomPoint(FVector pointRef, bool shouldInitObs);
+	void CreatePointOnPos(FVector pos, bool isObs);
+	FVector GenerateRandomPoint(FVector previousPos);
 
-	int currentIteration = 0;
 	FVector previousPosition = FVector(0, 0, 0);
 };

@@ -14,29 +14,17 @@ void AMyGameManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-    currentTimeInSpline = lastIncrementTime = 0;
-    GeneratePointOnPos(FVector(-100, -100, 0));
-    GeneratePointOnPos(FVector(0, 0, 0));
-    splinePoints = { FVector(-100, -100, 0), currentPoint};
+    currentTimeInSpline = currentIteration = 0;
     previousPosition = FVector(0, 0, 0);
-    GenerateNextPointInSplint();
-    GenerateNextPointInSplint();
-}
 
-void AMyGameManager::CreateSpline() {
-    if (currentIteration > 30) {
-        UE_LOG(LogTemp, Warning, TEXT("Ending spline creation")); 
-        return; }
-
-    for (float i = 0; i <= 1 - 0.01; i += 0.01) {
-        UE_LOG(LogTemp, Warning, TEXT("Drawing debug line"));
-        FVector p1 = CatmullRom(splinePoints[splinePoints.Num() - 4], splinePoints[splinePoints.Num() - 3], splinePoints[splinePoints.Num() - 2], splinePoints[splinePoints.Num() - 1], i, 0);
-        FVector p2 = CatmullRom(splinePoints[splinePoints.Num() - 4], splinePoints[splinePoints.Num() - 3], splinePoints[splinePoints.Num() - 2], splinePoints[splinePoints.Num() - 1], i + 0.01, 0);
-        DrawDebugLine(GetWorld(), p1, p2, FColor::Red, true, -1, 0, 5);
-    }
-    currentIteration++;
-    GenerateNextPointInSplint();
-    CreateSpline();
+    CreatePointOnPos(FVector(-100, -100, 0), false);
+    CreatePointOnPos(FVector(0, 0, 0), false);
+    CreateRandomPoint(currentPoint, false);
+    CreateRandomPoint(currentPoint, false);
+    CreateRandomPoint(currentPoint, false);
+    CreateRandomPoint(currentPoint, false);
+    CreateRandomPoint(currentPoint, false);
+    CreateRandomPoint(currentPoint, false);
 }
 
 // Called every frame
@@ -44,13 +32,13 @@ void AMyGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    currentTimeInSpline = UGameplayStatics::GetRealTimeSeconds(GetWorld()) / simulationSpeed - lastIncrementTime;  
-    FVector position = CatmullRom(splinePoints[splinePoints.Num() - 4], splinePoints[splinePoints.Num() - 3], splinePoints[splinePoints.Num() - 2], splinePoints[splinePoints.Num() - 1], currentTimeInSpline, 0);
+    currentTimeInSpline = UGameplayStatics::GetRealTimeSeconds(GetWorld()) / simulationSpeed - currentIteration;  
+    FVector position = CatmullRom(splinePoints[currentIteration]->position, splinePoints[currentIteration + 1]->position, splinePoints[currentIteration + 2]->position, splinePoints[currentIteration + 3]->position, currentTimeInSpline, 0);
     
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure
     if (currentTimeInSpline >= 1) {
-        lastIncrementTime += currentTimeInSpline;
-        GenerateNextPointInSplint();
+        currentIteration++;
+        CreateRandomPoint(currentPoint, true);
     }
     myPlayer->SetActorLocation(position);
 
@@ -61,32 +49,42 @@ void AMyGameManager::Tick(float DeltaTime)
     DrawDebugLine(GetWorld(), position, previousPosition, FColor::Red, true, -1, 0, 5);
 }
 
-FVector AMyGameManager::GenerateRandomPoint(FVector point)
+void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)
+{
+    FVector newPoint = GenerateRandomPoint(point);
+    
+    bool isObstacle = false;
+    if(shouldInitObs)
+        isObstacle = rand() % 2 == 1;
+    
+    CreatePointOnPos(newPoint, isObstacle);
+}
+
+void AMyGameManager::CreatePointOnPos(FVector pos, bool isObs)
+{
+    APoint* splinePoint = GetWorld()->SpawnActor<APoint>(splinePointBP, GetActorTransform());
+    splinePoint->SetActorLocation(pos);
+    splinePoint->Initialize(pos, isObs, planetGenerator);
+    splinePoints.Add(splinePoint);
+    currentPoint = pos;
+
+    //add reference to the old point
+    if (isObs) 
+        splinePoints[splinePoints.Num() - 3]->obsPointRef = splinePoint;
+    
+}
+
+FVector AMyGameManager::GenerateRandomPoint(FVector previousPos)
 {
     FVector newPoint = FVector(0, 0, 0);
     FVector shouldRandomze = FVector(rand() % 2, rand() % 2, rand() % 2);
-    newPoint = FVector(point.X + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.X, point.Y + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Y, point.Z + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Z);
-    
+    newPoint = FVector(previousPos.X + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.X, previousPos.Y + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Y, previousPos.Z + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Z);
+
     //if the new point being generated is the same as the previous, generate again
-    if (newPoint == splinePoints[splinePoints.Num() - 1]) newPoint = GenerateRandomPoint(newPoint);
+    if (newPoint == splinePoints[splinePoints.Num() - 1]->position) newPoint = GenerateRandomPoint(newPoint);
 
-    AActor* splinePoint = GetWorld()->SpawnActor<AActor>(splinePointBP, GetActorTransform());
-    splinePoint->SetActorLocation(newPoint);
     return newPoint;
-}
 
-void AMyGameManager::GeneratePointOnPos(FVector pos)
-{
-    AActor* splinePoint = GetWorld()->SpawnActor<AActor>(splinePointBP, GetActorTransform());
-    splinePoint->SetActorLocation(pos);
-    splinePoints.Add(pos);
-}
-
-void AMyGameManager::GenerateNextPointInSplint()
-{
-    FVector newPoint = GenerateRandomPoint(currentPoint);
-    splinePoints.Add(newPoint);
-    currentPoint = newPoint;
 }
 
 float AMyGameManager::GetT(float t, float alpha, const FVector& p0, const FVector& p1)
