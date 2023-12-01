@@ -32,6 +32,8 @@ void APoint::Initialize(FVector pos, bool isObs, APlanetGenerator* planetGenRef)
 	if (isObstacle) {
 		planet = planetGenerator->SpawnPlanet();
 		planet->SetActorLocation(position);
+		float randScale = ((float(rand()) / float(RAND_MAX)) * (1.25 - 0.75)) + 0.75;
+		planet->SetActorScale3D(FVector(randScale, randScale, randScale));
 	}
 }
 

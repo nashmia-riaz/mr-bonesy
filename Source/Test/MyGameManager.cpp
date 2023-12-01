@@ -50,26 +50,6 @@ void AMyGameManager::Tick(float DeltaTime)
     DrawDebugLine(GetWorld(), position, previousPosition, FColor::Red, true, -1, 0, 5);
 }
 
-void AMyGameManager::PlanetExplode(APlanet* planet)
-{
-    if (planet == nullptr) {
-        UE_LOG(LogTemp, Error, TEXT("[Game Manager] Could not find planet"));
-        return;
-    }
-
-    UGeometryCollectionComponent* geometryCollection = planet->FindComponentByClass<UGeometryCollectionComponent>();
-
-    //if (planet->planetGeometryCollection != nullptr) {
-    //    TSubclassOf<AActor> collectionToSpawn = planet->planetGeometryCollection;
-    //    /*AActor* planetCollectionToSpawn = */
-    //    UChaosDestructionListener::AddGeometryCollectionActor(collectionToSpawn);
-    //        GetWorld()->SpawnActor<AActor>(collectionToSpawn);
-    //    planetCollectionToSpawn->SetActorLocation(planet->GetActorLocation());
-    //}
-    //else UE_LOG(LogTemp, Error, TEXT("[Game Manager] Could not find the planet collection for planet. Null ptr"));
-
-    //planet->Destroy();
-}
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)
 {
@@ -100,7 +80,7 @@ FVector AMyGameManager::GenerateRandomPoint(FVector previousPos)
 {
     FVector newPoint = FVector(0, 0, 0);
     FVector shouldRandomze = FVector(rand() % 2, rand() % 2, rand() % 2);
-    newPoint = FVector(previousPos.X + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.X, previousPos.Y + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Y, previousPos.Z + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Z);
+    newPoint = FVector(previousPos.X + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.X, previousPos.Y + (rand() % (maxRand - minRand + 1) + minRand) * shouldRandomze.Y, previousPos.Z + (rand() % (maxRand - minRand + 1) + minRand) * ((shouldRandomze.Z && shouldRandomze.X) || (shouldRandomze.Z && shouldRandomze.Y)));
 
     //if the new point being generated is the same as the previous, generate again
     if (newPoint == splinePoints[splinePoints.Num() - 1]->position) newPoint = GenerateRandomPoint(newPoint);

@@ -16,9 +16,6 @@ APlanet::APlanet()
 void APlanet::BeginPlay()
 {
 	Super::BeginPlay(); 
-	//FRotator MyRotator = GetOwner()->GetActorRotation(); 
-	//MyRotator.Add(rotationAxis.X * UGameplayStatics::GetRealTimeSeconds(GetWorld()), rotationAxis.Y * UGameplayStatics::GetRealTimeSeconds(GetWorld()), rotationAxis.Z * UGameplayStatics::GetRealTimeSeconds(GetWorld()));
-	//this->SetActorRotation(MyRotator, ETeleportType::None);
 }
 
 // Called every frame

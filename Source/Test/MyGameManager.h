@@ -49,8 +49,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	APlanetGenerator* planetGenerator;
 
-	void PlanetExplode(APlanet* planet);
-
 private:
 	int maxRand = 300; int minRand = 50;
 	FVector currentPoint = FVector(0, 0, 0);
