@@ -49,11 +49,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	APlanetGenerator* planetGenerator;
 
+	void PlanetExplode(APlanet* planet);
+
 private:
 	int maxRand = 300; int minRand = 50;
 	FVector currentPoint = FVector(0, 0, 0);
 	
-	float simulationSpeed = 10;
+	float simulationSpeed = 5;
 	void CreateRandomPoint(FVector pointRef, bool shouldInitObs);
 	void CreatePointOnPos(FVector pos, bool isObs);
 	FVector GenerateRandomPoint(FVector previousPos);

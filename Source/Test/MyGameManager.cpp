@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "MyGameManager.h"
+ #include "MyGameManager.h"
+#include <ChaosBlueprint.h>
 
 // Sets default values
 AMyGameManager::AMyGameManager()
@@ -47,6 +48,27 @@ void AMyGameManager::Tick(float DeltaTime)
     myPlayer->SetActorRotation(fRotator, ETeleportType::None);
     previousPosition = position;
     DrawDebugLine(GetWorld(), position, previousPosition, FColor::Red, true, -1, 0, 5);
+}
+
+void AMyGameManager::PlanetExplode(APlanet* planet)
+{
+    if (planet == nullptr) {
+        UE_LOG(LogTemp, Error, TEXT("[Game Manager] Could not find planet"));
+        return;
+    }
+
+    UGeometryCollectionComponent* geometryCollection = planet->FindComponentByClass<UGeometryCollectionComponent>();
+
+    //if (planet->planetGeometryCollection != nullptr) {
+    //    TSubclassOf<AActor> collectionToSpawn = planet->planetGeometryCollection;
+    //    /*AActor* planetCollectionToSpawn = */
+    //    UChaosDestructionListener::AddGeometryCollectionActor(collectionToSpawn);
+    //        GetWorld()->SpawnActor<AActor>(collectionToSpawn);
+    //    planetCollectionToSpawn->SetActorLocation(planet->GetActorLocation());
+    //}
+    //else UE_LOG(LogTemp, Error, TEXT("[Game Manager] Could not find the planet collection for planet. Null ptr"));
+
+    //planet->Destroy();
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

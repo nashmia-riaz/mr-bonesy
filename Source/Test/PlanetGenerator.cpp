@@ -15,9 +15,9 @@ APlanet* APlanetGenerator::SpawnPlanet()
 {
 	int minRand = 0;
 	int maxRand = planets.Num()-1;
-	int planetToSpawn = rand() % (maxRand - minRand + 1) + minRand;
-	APlanet* randomPlanet = GetWorld()->SpawnActor<APlanet>(planets[planetToSpawn], GetActorTransform());
-	return randomPlanet;
+	int randomPlanet = rand() % (maxRand - minRand + 1) + minRand;
+	APlanet* planetToSpawn = GetWorld()->SpawnActor<APlanet>(planets[randomPlanet], GetActorTransform());
+	return planetToSpawn;
 }
 
 // Called when the game starts or when spawned

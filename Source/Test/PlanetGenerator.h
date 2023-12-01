@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Planet.h"
 #include "PlanetGenerator.generated.h"
-
 UCLASS()
 class TEST_API APlanetGenerator : public AActor
 {
@@ -18,6 +17,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<APlanet>> planets;
+
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<AActor>> planetGeometryCollections;
 
 	APlanet* SpawnPlanet();
 
