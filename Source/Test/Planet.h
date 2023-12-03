@@ -24,10 +24,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> planetGeometryCollection;
-
-private:
-	FVector rotationAxis;
 
 };

@@ -10,12 +10,9 @@ APlanetGenerator::APlanetGenerator()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-APlanet* APlanetGenerator::SpawnPlanet()
+APlanetScript* APlanetGenerator::SpawnPlanet()
 {
-	int minRand = 0;
-	int maxRand = planets.Num()-1;
-	int randomPlanet = rand() % (maxRand - minRand + 1) + minRand;
-	APlanet* planetToSpawn = GetWorld()->SpawnActor<APlanet>(planets[randomPlanet], GetActorTransform());
+	APlanetScript* planetToSpawn = GetWorld()->SpawnActor<APlanetScript>(planet, GetActorTransform());
 	return planetToSpawn;
 }
 

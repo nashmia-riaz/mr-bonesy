@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Planet.h"
+#include "PlanetScript.h"
+#include <GeometryCollection/GeometryCollectionObject.h>
 #include "PlanetGenerator.generated.h"
 UCLASS()
 class TEST_API APlanetGenerator : public AActor
@@ -16,12 +17,9 @@ public:
 	APlanetGenerator();
 
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<APlanet>> planets;
+	TSubclassOf<APlanetScript> planet;
 
-	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<AActor>> planetGeometryCollections;
-
-	APlanet* SpawnPlanet();
+	APlanetScript* SpawnPlanet();
 
 protected:
 	// Called when the game starts or when spawned

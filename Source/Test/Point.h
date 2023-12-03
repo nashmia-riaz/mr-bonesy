@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "PlanetGenerator.h"
-#include "Planet.h"
 #include "GameFramework/Actor.h"
 #include "Point.generated.h"
 
@@ -20,7 +19,7 @@ public:
 	void Initialize(FVector pos, bool isObs, APlanetGenerator* planetGenRef);
 	FVector position;
 	bool isObstacle = false;
-	APlanet* planet = nullptr;
+	APlanetScript* planet = nullptr;
 
 	APoint* obsPointRef = nullptr;
 
