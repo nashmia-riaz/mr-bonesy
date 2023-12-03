@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Planet.h"
+#include <Kismet/GameplayStatics.h>
 #include <GameFramework/RotatingMovementComponent.h>
 #include <Components/SphereComponent.h>
 #include <GeometryCollection/GeometryCollection.h>
@@ -17,7 +17,7 @@
  * 
  */
 UCLASS()
-class TEST_API APlanetScript : public APlanet
+class TEST_API APlanetScript : public AActor
 {
 	GENERATED_BODY()
 
