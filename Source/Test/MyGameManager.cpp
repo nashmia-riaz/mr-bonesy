@@ -26,6 +26,7 @@ void AMyGameManager::BeginPlay()
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
+
 }
 
 // Called every frame
@@ -50,6 +51,11 @@ void AMyGameManager::Tick(float DeltaTime)
     DrawDebugLine(GetWorld(), position, previousPosition, FColor::Red, true, -1, 0, 5);
 }
 
+
+void AMyGameManager::UpdateHealth(float currentHealth, float maxHealth)
+{
+    UIHandler->SetHealth(currentHealth / maxHealth);
+}
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)
 {

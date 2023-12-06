@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "list"
+#include "UIHandler.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()
@@ -48,6 +49,11 @@ public:
 	//we use this to create the planet
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	APlanetGenerator* planetGenerator;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AUIHandler* UIHandler;
+
+	void UpdateHealth(float currentHealth, float maxHealth);
 
 private:
 	int maxRand = 300; int minRand = 50;

@@ -31,4 +31,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AMyGameManager* gameManager;
+	
+private:
+	void PlayerTookDamage(float damage);
+	float maxHealth = 100;
+	float currentHealth = 100;
 };
