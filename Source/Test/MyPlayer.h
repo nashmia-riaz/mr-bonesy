@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Point.h"
-#include "GameFramework/Actor.h"
 #include "MyGameManager.h"
 #include <Components/SphereComponent.h>
+#include "Camera/CameraComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "InputCoreTypes.h"
+#include <GameFramework/SpringArmComponent.h>
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -37,4 +40,10 @@ private:
 	void RecalculateRoute(APoint* currentPoint);
 	float maxHealth = 100;
 	float currentHealth = 100;
+
+	FVector previousPos = FVector(0, 0, 0);
+	FVector newPos = FVector(0, 0, 0);
+
+	UCameraComponent* camera;
+	bool isAnimatingCamera = false;
 };

@@ -41,4 +41,7 @@ public:
 	UDangerWidget* dangerWidget;
 	
 	void TriggerDangerUI(bool enable);
+
+	UFUNCTION()
+	void ShowMathInputUI();
 };

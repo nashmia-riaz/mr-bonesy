@@ -56,3 +56,8 @@ void AUIHandler::TriggerDangerUI(bool enable)
 	}
 }
 
+void AUIHandler::ShowMathInputUI()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Input UI"));
+}
+

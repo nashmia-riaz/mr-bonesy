@@ -11,7 +11,7 @@
 #include "DrawDebugHelpers.h"
 #include "list"
 #include "UIHandler.h"
-//#include "Math/UnrealMathUtility.h"
+#include "CustomCameraAnimator.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()
@@ -55,12 +55,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AUIHandler* UIHandler;
 
+	UPROPERTY(EditAnywhere)
+	ACustomCameraAnimator* animationController;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float currentSpeed;
 
 	void UpdateHealth(float currentHealth, float maxHealth);
 
 	void RecalculatePath(APoint* point);
+	void RecalculatePath();
+	void ResumePath();
+
+	void OnSetViewPlanet();
 
 private:
 	int maxRand = 400; int minRand = 300;

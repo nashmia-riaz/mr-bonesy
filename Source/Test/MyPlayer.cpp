@@ -16,12 +16,15 @@ void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	if (!gameManager) UE_LOG(LogTemp, Error, TEXT("[Player] Please add reference to game manager object"));
+
+	camera = this->FindComponentByClass<UCameraComponent>();
 }
 
 // Called every frame
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void AMyPlayer::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -30,7 +33,7 @@ void AMyPlayer::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 		if (OtherActor->ActorHasTag("SplinePoint"))
 		{
 			APoint* point = (APoint*) OtherActor;
-			RecalculateRoute(point);
+			//RecalculateRoute(point);
 			UE_LOG(LogTemp, Log, TEXT("[Player] Hit point (%f, %f, %f) has obstacle reference %d"), point->position.X, point->position.Y, point->position.Z, point->obsPointRef != nullptr);
 		}
 		else if (OtherActor->ActorHasTag("Planet")) {

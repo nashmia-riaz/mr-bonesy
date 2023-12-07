@@ -52,6 +52,9 @@ void AMyGameManager::Tick(float DeltaTime)
             isMoving = false;
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
+            animationController->StartAnimation(myPlayer, splinePoints[currentIteration + 2]->obsPointRef);
+            animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowMathInputUI);
+            currentTimeInSpline = 0.99;
         }
     }
 
@@ -113,6 +116,21 @@ void AMyGameManager::RecalculatePath(APoint* point)
         splinePoints.Insert(splinePoint, insertAt + 1);
         DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Cyan, true, 0, 0, 5);
     }
+}
+
+void AMyGameManager::RecalculatePath()
+{
+    RecalculatePath(splinePoints[currentIteration + 2]);
+}
+
+void AMyGameManager::ResumePath()
+{
+    isMoving = true;
+    currentSpeed = simulationSpeed;
+}
+
+void AMyGameManager::OnSetViewPlanet()
+{
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)
