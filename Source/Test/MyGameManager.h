@@ -65,9 +65,12 @@ public:
 
 	void RecalculatePath(APoint* point);
 	void RecalculatePath();
+
+	UFUNCTION()
 	void ResumePath();
 
 	void PanViewToPlanet();
+	void PanToPlayer();
 
 private:
 	int maxRand = 400; int minRand = 300;

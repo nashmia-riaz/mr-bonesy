@@ -27,9 +27,9 @@ void AMyPlayerController::Tick(float DeltaTime)
 {
 	if (WasInputKeyJustPressed(EKeys::T)) {
 		gameManager->RecalculatePath();
-		gameManager->ResumePath();
+		gameManager->PanToPlayer();
 	}
 	if (WasInputKeyJustPressed(EKeys::R)) {
-		gameManager->ResumePath();
+		gameManager->PanToPlayer();
 	}
 }

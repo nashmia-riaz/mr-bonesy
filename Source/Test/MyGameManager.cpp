@@ -53,17 +53,16 @@ void AMyGameManager::Tick(float DeltaTime)
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
             PanViewToPlanet();
-            animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowMathInputUI);
             currentTimeInSpline = 0.99;
         }
     }
-
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure
     if (currentTimeInSpline >= 1) {
         currentIteration++;
         currentTimeInSpline = 0;
         CreateRandomPoint(currentPoint, true);
     }
+
     myPlayer->SetActorLocation(position);
 
     FVector facingVector = position - previousPosition;
@@ -125,9 +124,11 @@ void AMyGameManager::RecalculatePath()
 
 void AMyGameManager::ResumePath()
 {
-    //animationController->StartAnimation(myPlayer, splinePoints[currentIteration + 2]->obsPointRef);
-    isMoving = true;
+    UE_LOG(LogTemp, Warning, TEXT("Resuming path"));
     currentSpeed = simulationSpeed;
+    currentTimeInSpline = 0;
+    currentIteration++;
+    isMoving = true;
 }
 
 void AMyGameManager::PanViewToPlanet()
@@ -146,6 +147,24 @@ void AMyGameManager::PanViewToPlanet()
     springArm->bEnableCameraLag = false;
 
     animationController->StartAnimation(prevPos, prevRotation, finalPos, finalRotation, camera);
+    animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowMathInputUI);
+}
+
+void AMyGameManager::PanToPlayer()
+{
+    FRotator prevRotation = animationController->GetPrevRot();
+    FVector prevLocation = animationController->GetPrevPos();
+    FRotator targetRot = animationController->GetTargetRot();
+    FVector targetLoc = animationController->GetTargetPos();
+
+    UCameraComponent* camera = myPlayer->GetComponentByClass<UCameraComponent>();
+
+    USpringArmComponent* springArm = myPlayer->GetComponentByClass<USpringArmComponent>();
+    springArm->bEnableCameraLag = true;
+
+    animationController->StartAnimation(targetLoc, targetRot, prevLocation, prevRotation, camera);
+    animationController->onAnimationComplete.AddDynamic(this, &AMyGameManager::ResumePath);
+
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

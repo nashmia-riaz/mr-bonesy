@@ -35,6 +35,10 @@ public:
 	void StartAnimation(FVector prevPosition, FRotator prevRotator, FVector targetLocation, FRotator finalRot, USceneComponent* obj);
 	void Animate( float deltaTime);
 
+	FVector GetPrevPos() { return prevPos; }
+	FRotator GetPrevRot() { return prevRot; }
+	FVector GetTargetPos() { return newPos; }
+	FRotator GetTargetRot() { return newRot; }
 private:
 	bool isAnimating = false;
 	FVector prevPos;

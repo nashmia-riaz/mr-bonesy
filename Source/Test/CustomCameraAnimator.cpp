@@ -55,7 +55,6 @@ void ACustomCameraAnimator::Animate(float deltaTime)
 	if (currentTimePassed > 1)
 	{
 		isAnimating = false;
-		UE_LOG(LogTemp, Warning, TEXT("Animation complete"));
 		onAnimationComplete.Broadcast();
 	}
 }
