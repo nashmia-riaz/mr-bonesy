@@ -34,6 +34,7 @@ public:
 	
 private:
 	void PlayerTookDamage(float damage);
+	void RecalculateRoute(APoint* currentPoint);
 	float maxHealth = 100;
 	float currentHealth = 100;
 };

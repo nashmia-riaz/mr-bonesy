@@ -17,10 +17,6 @@ APoint::APoint(FVector pos, bool isObs, APlanetGenerator* planetGenRef)
 	isObstacle = isObs;
 	planetGenerator = planetGenRef;
 
-	/*if (isObstacle) {
-		planet = planetGenerator->SpawnPlanet();
-		planet->SetActorLocation(position);
-	}*/
 }
 
 void APoint::Initialize(FVector pos, bool isObs, APlanetGenerator* planetGenRef)
@@ -35,6 +31,8 @@ void APoint::Initialize(FVector pos, bool isObs, APlanetGenerator* planetGenRef)
 		float randScale = ((float(rand()) / float(RAND_MAX)) * (1.25 - 0.75)) + 0.75;
 		planet->SetActorScale3D(FVector(randScale, randScale, randScale));
 	}
+
+	DrawDebugSphere(GetWorld(), pos, 5, 16, FColor::Yellow, true, 0, 0, 5);
 }
 
 // Called when the game starts or when spawned

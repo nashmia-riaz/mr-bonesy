@@ -55,14 +55,18 @@ public:
 
 	void UpdateHealth(float currentHealth, float maxHealth);
 
+	void RecalculatePath(APoint* point);
+
 private:
-	int maxRand = 300; int minRand = 50;
+	int maxRand = 400; int minRand = 300;
 	FVector currentPoint = FVector(0, 0, 0);
 	
 	float simulationSpeed = 5;
 	void CreateRandomPoint(FVector pointRef, bool shouldInitObs);
-	void CreatePointOnPos(FVector pos, bool isObs);
+	void CreatePointOnPos(FVector pos, FVector previousPos, bool isObs);
 	FVector GenerateRandomPoint(FVector previousPos);
+	int FindIndByPoint(APoint* point);
 
 	FVector previousPosition = FVector(0, 0, 0);
+	int lastIterationOnPlanetCreated = 0; int iterationsBeforeNextPlanet = 3;
 };

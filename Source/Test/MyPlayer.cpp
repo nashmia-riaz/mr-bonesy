@@ -30,6 +30,7 @@ void AMyPlayer::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 		if (OtherActor->ActorHasTag("SplinePoint"))
 		{
 			APoint* point = (APoint*) OtherActor;
+			RecalculateRoute(point);
 			UE_LOG(LogTemp, Log, TEXT("[Player] Hit point (%f, %f, %f) has obstacle reference %d"), point->position.X, point->position.Y, point->position.Z, point->obsPointRef != nullptr);
 		}
 		else if (OtherActor->ActorHasTag("Planet")) {
@@ -44,5 +45,10 @@ void AMyPlayer::PlayerTookDamage(float damage)
 	if (currentHealth <= 0) currentHealth = 0;
 	
 	gameManager->UpdateHealth(currentHealth, maxHealth);
+}
+
+void AMyPlayer::RecalculateRoute(APoint* currentPoint)
+{
+	gameManager->RecalculatePath(currentPoint);
 }
 

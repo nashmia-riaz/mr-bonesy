@@ -18,11 +18,8 @@ void AMyGameManager::BeginPlay()
     currentTimeInSpline = currentIteration = 0;
     previousPosition = FVector(0, 0, 0);
 
-    CreatePointOnPos(FVector(-100, -100, 0), false);
-    CreatePointOnPos(FVector(0, 0, 0), false);
-    CreateRandomPoint(currentPoint, false);
-    CreateRandomPoint(currentPoint, false);
-    CreateRandomPoint(currentPoint, false);
+    CreatePointOnPos(FVector(-100, -100, 0), FVector(-100, -100, 0), false);
+    CreatePointOnPos(FVector(0, 0, 0), FVector(-100, -100, 0), false);
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
@@ -57,18 +54,61 @@ void AMyGameManager::UpdateHealth(float currentHealth, float maxHealth)
     UIHandler->SetHealth(currentHealth / maxHealth);
 }
 
+void AMyGameManager::RecalculatePath(APoint* point)
+{
+    //our hit point is currentIteration + 3, so our targetted point will be currentIteration + 5
+    APoint* targettedPoint = point->obsPointRef;
+    if (targettedPoint) {
+        APlanetScript* planet = targettedPoint->planet;
+        FVector oldPosition = targettedPoint->position;
+
+        float planetSize = planet->GetActorScale().X * 100+ 50;
+        FVector facingBackwards = -targettedPoint->GetActorForwardVector();
+        FVector facingRight = rand() % 2 == 1 ? targettedPoint->GetActorRightVector() : -targettedPoint->GetActorRightVector();
+
+        //first, we need to move the point inside the planet backwards into the spline
+        FVector newPosition = targettedPoint->position + (facingBackwards * planetSize);
+        targettedPoint->position = newPosition;
+        targettedPoint->SetActorLocation(newPosition);
+        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Yellow, true, 0, 0, 5);
+    
+        //we also need to add a point that swerves around this planet now
+        newPosition = oldPosition + facingRight * planetSize;
+        int insertAt = FindIndByPoint(targettedPoint) + 1;
+        
+        APoint* splinePoint = GetWorld()->SpawnActor<APoint>(splinePointBP, GetActorTransform());
+        splinePoint->SetActorLocation(newPosition);
+        splinePoint->Initialize(newPosition, false, planetGenerator);
+        splinePoints.Insert(splinePoint, insertAt);
+        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Cyan, true, 0, 0, 5);
+
+        //lastly, we need to add a point in front of the planet so we completely bypass it
+        newPosition = oldPosition + (-facingBackwards) * planetSize;
+        
+        splinePoint = GetWorld()->SpawnActor<APoint>(splinePointBP, GetActorTransform());
+        splinePoint->SetActorLocation(newPosition);
+        splinePoint->Initialize(newPosition, false, planetGenerator);
+        splinePoints.Insert(splinePoint, insertAt + 1);
+        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Cyan, true, 0, 0, 5);
+    }
+}
+
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)
 {
     FVector newPoint = GenerateRandomPoint(point);
-    
+
     bool isObstacle = false;
-    if(shouldInitObs)
-        isObstacle = rand() % 2 == 1;
-    
-    CreatePointOnPos(newPoint, isObstacle);
+    if (splinePoints.Num() - lastIterationOnPlanetCreated > iterationsBeforeNextPlanet) {
+        if (shouldInitObs)
+            isObstacle = ((float)rand()) / (float)RAND_MAX > 0.5;
+    }
+
+    CreatePointOnPos(newPoint, point, isObstacle);
+
+    if (isObstacle) lastIterationOnPlanetCreated = splinePoints.Num() - 1;
 }
 
-void AMyGameManager::CreatePointOnPos(FVector pos, bool isObs)
+void AMyGameManager::CreatePointOnPos(FVector pos, FVector previousPos, bool isObs)
 {
     APoint* splinePoint = GetWorld()->SpawnActor<APoint>(splinePointBP, GetActorTransform());
     splinePoint->SetActorLocation(pos);
@@ -76,8 +116,12 @@ void AMyGameManager::CreatePointOnPos(FVector pos, bool isObs)
     splinePoints.Add(splinePoint);
     currentPoint = pos;
 
+    FVector facingVector = pos - previousPos;
+    FRotator fRotator = facingVector.Rotation();
+    splinePoint->SetActorRotation(fRotator, ETeleportType::None);
+
     //add reference to the old point
-    if (isObs) 
+    if (isObs && (splinePoints.Num() - 3 >= 0))
         splinePoints[splinePoints.Num() - 3]->obsPointRef = splinePoint;
     
 }
@@ -93,6 +137,19 @@ FVector AMyGameManager::GenerateRandomPoint(FVector previousPos)
 
     return newPoint;
 
+}
+
+int AMyGameManager::FindIndByPoint(APoint* point)
+{
+    int ind = -1;
+    for (int i = 0; i < splinePoints.Num(); i++) {
+        if (splinePoints[i]->position == point->position)
+        {
+            ind = i;
+            break;
+        }
+    }
+    return ind;
 }
 
 float AMyGameManager::GetT(float t, float alpha, const FVector& p0, const FVector& p1)
