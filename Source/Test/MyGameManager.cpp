@@ -86,7 +86,9 @@ void AMyGameManager::RecalculatePath(APoint* point)
         APlanetScript* planet = targettedPoint->planet;
         FVector oldPosition = targettedPoint->position;
 
-        float planetSize = planet->GetActorScale().X * 100+ 50;
+        USphereComponent* playerSphere = myPlayer->GetComponentByClass<USphereComponent>();
+
+        float planetSize = planet->GetActorScale().X * 100 + 50 + playerSphere->GetScaledSphereRadius() / 2;
         FVector facingBackwards = -targettedPoint->GetActorForwardVector();
         FVector facingRight = rand() % 2 == 1 ? targettedPoint->GetActorRightVector() : -targettedPoint->GetActorRightVector();
 
