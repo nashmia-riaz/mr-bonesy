@@ -32,7 +32,7 @@ void AMyGameManager::BeginPlay()
 // Called every frame
 void AMyGameManager::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
     if (!isMoving) return;
 
@@ -40,14 +40,19 @@ void AMyGameManager::Tick(float DeltaTime)
 
     //currentTimeInSpline = (UGameplayStatics::GetRealTimeSeconds(GetWorld()) / currentSpeed) - currentIteration;  
     FVector position = CatmullRom(splinePoints[currentIteration]->position, splinePoints[currentIteration + 1]->position, splinePoints[currentIteration + 2]->position, splinePoints[currentIteration + 3]->position, currentTimeInSpline, 0);
-    
+
     //as we are reaching the end of a spline, if the 3rd point refers to an obstacle, we will slow down to a stop
     if (splinePoints[currentIteration + 2]->obsPointRef) {
         if (currentTimeInSpline > 0.5) {
-            currentSpeed *= 0.99;
+            currentSpeed = FMath::Lerp(simulationSpeed, 0, (currentTimeInSpline - 0.5) / 0.5);
+            UIHandler->TriggerDangerUI(true);
         }
 
-        if (currentSpeed <= 0.005) isMoving = false;
+        if (currentSpeed <= 0.005) {
+            isMoving = false;
+            currentSpeed = 0;
+            UIHandler->TriggerDangerUI(false);
+        }
     }
 
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure

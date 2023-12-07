@@ -7,9 +7,11 @@
 #include "MyCharacter.h"
 #include "Point.h"
 #include "Kismet/GameplayStatics.h"
+#include <Kismet/KismetMathLibrary.h>
 #include "DrawDebugHelpers.h"
 #include "list"
 #include "UIHandler.h"
+//#include "Math/UnrealMathUtility.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()

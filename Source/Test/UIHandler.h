@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include "HealthBarWidget.h"
+#include "DangerWidget.h"
 #include "UIHandler.generated.h"
 
 UCLASS()
@@ -32,4 +33,12 @@ public:
 	UHealthBarWidget* healthBarWidget;
 
 	void SetHealth(float healthPercentage);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UDangerWidget> dangerWidget_BP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UDangerWidget* dangerWidget;
+	
+	void TriggerDangerUI(bool enable);
 };

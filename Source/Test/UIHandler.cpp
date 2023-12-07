@@ -18,6 +18,10 @@ void AUIHandler::BeginPlay()
 
 	/*healthBarWidget = CreateWidget<UHealthBarWidget>(GetWorld(), HealthWidgetComponent_BP);
 	healthBarWidget->AddToViewport();*/
+
+	dangerWidget = CreateWidget<UDangerWidget>(GetWorld(), dangerWidget_BP);
+	dangerWidget->AddToViewport();
+	dangerWidget->SetIsEnabled(false);
 }
 
 // Called every frame
@@ -34,5 +38,21 @@ void AUIHandler::SetHealth(float healthPercentage)
 		return;
 	}
 	healthBarWidget->healthbar->SetPercent(healthPercentage);
+}
+
+void AUIHandler::TriggerDangerUI(bool enable)
+{
+	//if we are calling this function repeatedly and widget is already set, return void
+	if (enable == dangerWidget->bIsEnabled) return; 
+
+	dangerWidget->SetIsEnabled(enable);
+	if (enable)
+	{
+		if(dangerWidget->FadeInOutRef)
+			dangerWidget->PlayAnimation( dangerWidget->FadeInOutRef, 0, 5, EUMGSequencePlayMode::Forward, 1, true);
+	}
+	else {
+		dangerWidget->StopAllAnimations();
+	}
 }
 
