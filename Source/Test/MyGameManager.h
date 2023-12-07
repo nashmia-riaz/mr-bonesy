@@ -67,7 +67,7 @@ public:
 	void RecalculatePath();
 	void ResumePath();
 
-	void OnSetViewPlanet();
+	void PanViewToPlanet();
 
 private:
 	int maxRand = 400; int minRand = 300;

@@ -25,20 +25,19 @@ void ACustomCameraAnimator::Tick(float DeltaTime)
 	if (isAnimating) Animate(DeltaTime);
 }
 
-void ACustomCameraAnimator::StartAnimation(AActor* player, APoint* obsPoint)
+void ACustomCameraAnimator::StartAnimation(FVector prevPosition, FRotator prevRotator, FVector targetLocation, FRotator finalRot, USceneComponent* obj)
 {
-	objectToAnimate = player->GetComponentByClass<UCameraComponent>();
-	float planetSize = obsPoint->planet->GetActorScale().X;
+	//empty out the delegate first
+	onAnimationComplete.Clear();
 
-	this->prevPos = objectToAnimate->GetComponentLocation();
-	this->newPos = obsPoint->position + (-obsPoint->GetActorForwardVector()*(planetSize + 100));
-	this->prevRot = objectToAnimate->GetComponentRotation();
-	this->newRot = UKismetMathLibrary::FindLookAtRotation(newPos, obsPoint->position);
+	this->prevPos = prevPosition;
+	this->newPos = targetLocation;
+	this->prevRot = prevRotator;
+	this->newRot = finalRot;
 	
 	currentTimePassed = 0;
 	
-	USpringArmComponent* springArm = player->GetComponentByClass<USpringArmComponent>();
-	springArm->bEnableCameraLag = false;
+	objectToAnimate = obj;
 
 	isAnimating = true;
 }

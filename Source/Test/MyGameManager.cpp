@@ -52,7 +52,7 @@ void AMyGameManager::Tick(float DeltaTime)
             isMoving = false;
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
-            animationController->StartAnimation(myPlayer, splinePoints[currentIteration + 2]->obsPointRef);
+            PanViewToPlanet();
             animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowMathInputUI);
             currentTimeInSpline = 0.99;
         }
@@ -125,12 +125,27 @@ void AMyGameManager::RecalculatePath()
 
 void AMyGameManager::ResumePath()
 {
+    //animationController->StartAnimation(myPlayer, splinePoints[currentIteration + 2]->obsPointRef);
     isMoving = true;
     currentSpeed = simulationSpeed;
 }
 
-void AMyGameManager::OnSetViewPlanet()
+void AMyGameManager::PanViewToPlanet()
 {
+    UCameraComponent* camera = myPlayer->GetComponentByClass<UCameraComponent>();
+
+    FVector prevPos = camera->GetComponentLocation();
+
+    FVector planetSize = splinePoints[currentIteration + 2]->obsPointRef->planet->GetActorScale() * 100;
+    FVector finalPos = splinePoints[currentIteration + 2]->obsPointRef->position + (-splinePoints[currentIteration + 2]->obsPointRef->GetActorForwardVector() * (planetSize.X + 50));
+
+    FRotator prevRotation = camera->GetComponentRotation();
+    FRotator finalRotation = UKismetMathLibrary::FindLookAtRotation(finalPos, splinePoints[currentIteration + 2]->obsPointRef->position);
+
+    USpringArmComponent* springArm = myPlayer->GetComponentByClass<USpringArmComponent>();
+    springArm->bEnableCameraLag = false;
+
+    animationController->StartAnimation(prevPos, prevRotation, finalPos, finalRotation, camera);
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

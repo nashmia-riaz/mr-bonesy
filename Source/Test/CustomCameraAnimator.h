@@ -32,7 +32,7 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAnimationComplete);
 
 	FOnAnimationComplete onAnimationComplete;
-	void StartAnimation(AActor* player, APoint* obsPoint);
+	void StartAnimation(FVector prevPosition, FRotator prevRotator, FVector targetLocation, FRotator finalRot, USceneComponent* obj);
 	void Animate( float deltaTime);
 
 private:
