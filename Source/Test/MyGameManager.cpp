@@ -6,7 +6,10 @@
 AMyGameManager::AMyGameManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = true;
+    simulationSpeed = 0.35;
+    currentSpeed = simulationSpeed;
+    currentTimeInSpline = 0;
 }
 
 
@@ -31,12 +34,26 @@ void AMyGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    currentTimeInSpline = UGameplayStatics::GetRealTimeSeconds(GetWorld()) / simulationSpeed - currentIteration;  
+    if (!isMoving) return;
+
+    currentTimeInSpline = currentTimeInSpline + DeltaTime * currentSpeed;
+
+    //currentTimeInSpline = (UGameplayStatics::GetRealTimeSeconds(GetWorld()) / currentSpeed) - currentIteration;  
     FVector position = CatmullRom(splinePoints[currentIteration]->position, splinePoints[currentIteration + 1]->position, splinePoints[currentIteration + 2]->position, splinePoints[currentIteration + 3]->position, currentTimeInSpline, 0);
     
+    //as we are reaching the end of a spline, if the 3rd point refers to an obstacle, we will slow down to a stop
+    if (splinePoints[currentIteration + 2]->obsPointRef) {
+        if (currentTimeInSpline > 0.5) {
+            currentSpeed *= 0.99;
+        }
+
+        if (currentSpeed <= 0.005) isMoving = false;
+    }
+
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure
     if (currentTimeInSpline >= 1) {
         currentIteration++;
+        currentTimeInSpline = 0;
         CreateRandomPoint(currentPoint, true);
     }
     myPlayer->SetActorLocation(position);

@@ -53,6 +53,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AUIHandler* UIHandler;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float currentSpeed;
+
 	void UpdateHealth(float currentHealth, float maxHealth);
 
 	void RecalculatePath(APoint* point);
@@ -62,6 +65,8 @@ private:
 	FVector currentPoint = FVector(0, 0, 0);
 	
 	float simulationSpeed = 5;
+	bool isMoving = true;
+
 	void CreateRandomPoint(FVector pointRef, bool shouldInitObs);
 	void CreatePointOnPos(FVector pos, FVector previousPos, bool isObs);
 	FVector GenerateRandomPoint(FVector previousPos);
