@@ -85,5 +85,7 @@ private:
 	int FindIndByPoint(APoint* point);
 
 	FVector previousPosition = FVector(0, 0, 0);
-	int lastIterationOnPlanetCreated = 0; int iterationsBeforeNextPlanet = 3;
+
+	int lastIterationOnPlanetCreated = 0; 
+	int iterationsBeforeNextPlanet = 3;
 };

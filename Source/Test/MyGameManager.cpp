@@ -10,6 +10,8 @@ AMyGameManager::AMyGameManager()
     simulationSpeed = 0.35;
     currentSpeed = simulationSpeed;
     currentTimeInSpline = 0;
+    lastIterationOnPlanetCreated = 0;
+    iterationsBeforeNextPlanet = 5;
 }
 
 
@@ -48,7 +50,7 @@ void AMyGameManager::Tick(float DeltaTime)
             UIHandler->TriggerDangerUI(true);
         }
 
-        if (currentSpeed <= 0.005) {
+        if (currentTimeInSpline >= 0.95) {
             isMoving = false;
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
