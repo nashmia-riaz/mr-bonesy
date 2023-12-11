@@ -128,7 +128,6 @@ void AMyGameManager::RecalculatePath()
 
 void AMyGameManager::ResumePath()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Resuming path"));
     currentSpeed = simulationSpeed;
     currentTimeInSpline = 0;
     currentIteration++;
@@ -151,7 +150,7 @@ void AMyGameManager::PanViewToPlanet()
     springArm->bEnableCameraLag = false;
 
     animationController->StartAnimation(prevPos, prevRotation, finalPos, finalRotation, camera);
-    animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowMathInputUI);
+    animationController->onAnimationComplete.AddDynamic(UIHandler, &AUIHandler::ShowEquationUI);
 }
 
 void AMyGameManager::PanToPlayer()
@@ -169,6 +168,7 @@ void AMyGameManager::PanToPlayer()
     animationController->StartAnimation(targetLoc, targetRot, prevLocation, prevRotation, camera);
     animationController->onAnimationComplete.AddDynamic(this, &AMyGameManager::ResumePath);
 
+    UIHandler->HideEquationUI();
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

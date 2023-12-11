@@ -16,12 +16,21 @@ void AUIHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!dangerWidget_BP || !equationWidget_BP)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UI HANDLER] Can't initialize UI handler. Please add UI references."));
+		return;
+	}
 	/*healthBarWidget = CreateWidget<UHealthBarWidget>(GetWorld(), HealthWidgetComponent_BP);
 	healthBarWidget->AddToViewport();*/
 
 	dangerWidget = CreateWidget<UDangerWidget>(GetWorld(), dangerWidget_BP);
 	dangerWidget->AddToViewport();
 	dangerWidget->SetIsEnabled(false);
+
+	equationWidget = CreateWidget<UEquationWidget>(GetWorld(), equationWidget_BP);
+	equationWidget->AddToViewport();
+	equationWidget->SetIsEnabled(false);
 }
 
 // Called every frame
@@ -56,8 +65,14 @@ void AUIHandler::TriggerDangerUI(bool enable)
 	}
 }
 
-void AUIHandler::ShowMathInputUI()
+void AUIHandler::ShowEquationUI()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Input UI"));
+	equationWidget->SetIsEnabled(true);
+	equationWidget->PlayAnimation(equationWidget->FadeIn, 0, 1, EUMGSequencePlayMode::Forward, 1, false);
+	
 }
 
+void AUIHandler::HideEquationUI()
+{
+	equationWidget->PlayAnimation(equationWidget->FadeOut, 0, 1, EUMGSequencePlayMode::Forward, 1, true);
+}

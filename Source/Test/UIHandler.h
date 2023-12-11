@@ -7,6 +7,7 @@
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include "HealthBarWidget.h"
 #include "DangerWidget.h"
+#include "EquationWidget.h"
 #include "UIHandler.generated.h"
 
 UCLASS()
@@ -39,9 +40,19 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDangerWidget* dangerWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UEquationWidget> equationWidget_BP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UEquationWidget* equationWidget;
 	
 	void TriggerDangerUI(bool enable);
 
 	UFUNCTION()
-	void ShowMathInputUI();
+	void ShowEquationUI();
+
+	UFUNCTION()
+	void HideEquationUI();
+	
 };

@@ -5,7 +5,6 @@
 
 void AMyPlayerController::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Setup input"));
 	EnableInput(this);
     
     TArray<AActor*> ActorsToFind;
