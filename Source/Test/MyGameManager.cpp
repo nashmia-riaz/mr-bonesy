@@ -56,6 +56,7 @@ void AMyGameManager::Tick(float DeltaTime)
             UIHandler->TriggerDangerUI(false);
             PanViewToPlanet();
             currentTimeInSpline = 0.99;
+            QTEHandler->GenerateEquation();
         }
     }
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure
@@ -132,6 +133,7 @@ void AMyGameManager::ResumePath()
     currentTimeInSpline = 0;
     currentIteration++;
     isMoving = true;
+    approachingPlanet = false;
 }
 
 void AMyGameManager::PanViewToPlanet()

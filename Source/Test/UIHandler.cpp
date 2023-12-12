@@ -76,3 +76,9 @@ void AUIHandler::HideEquationUI()
 {
 	equationWidget->PlayAnimation(equationWidget->FadeOut, 0, 1, EUMGSequencePlayMode::Forward, 1, true);
 }
+
+void AUIHandler::UpdateEquationUI(int var1, int var2, operand op)
+{
+	equationWidget->UpdateEquation(var1, var2, op);
+	UE_LOG(LogTemp, Warning, TEXT("[UI Handler] Updated equation"));
+}

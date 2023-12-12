@@ -7,6 +7,7 @@
 #include <Components/ProgressBar.h>
 #include <Components/TextBlock.h>
 #include "Animation/WidgetAnimation.h"
+#include "Equation.h"
 #include "EquationWidget.generated.h"
 
 /**
@@ -25,6 +26,9 @@ class TEST_API UEquationWidget : public UUserWidget
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Answer;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Operator;
 
 
 public: 
@@ -48,4 +52,5 @@ public:
 	UFUNCTION()
 	void ExecuteOnFadeOutFinished();
 
+	void UpdateEquation(int x, int y, operand op);
 };

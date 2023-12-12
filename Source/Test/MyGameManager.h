@@ -12,6 +12,7 @@
 #include "list"
 #include "UIHandler.h"
 #include "CustomCameraAnimator.h"
+#include "QTEHandler.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()
@@ -58,6 +59,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	ACustomCameraAnimator* animationController;
 
+	UPROPERTY(EditAnywhere)
+	AQTEHandler* QTEHandler;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float currentSpeed;
 
@@ -78,6 +82,7 @@ private:
 	
 	float simulationSpeed = 5;
 	bool isMoving = true;
+	bool approachingPlanet = false;
 
 	void CreateRandomPoint(FVector pointRef, bool shouldInitObs);
 	void CreatePointOnPos(FVector pos, FVector previousPos, bool isObs);
@@ -88,4 +93,5 @@ private:
 
 	int lastIterationOnPlanetCreated = 0; 
 	int iterationsBeforeNextPlanet = 3;
+
 };

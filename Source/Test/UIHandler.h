@@ -8,6 +8,7 @@
 #include "HealthBarWidget.h"
 #include "DangerWidget.h"
 #include "EquationWidget.h"
+#include "Equation.h"
 #include "UIHandler.generated.h"
 
 UCLASS()
@@ -54,5 +55,7 @@ public:
 
 	UFUNCTION()
 	void HideEquationUI();
+
+	void UpdateEquationUI(int var1, int var2, operand op);
 	
 };
