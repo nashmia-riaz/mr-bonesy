@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "EquationWidget.h"
@@ -30,6 +30,7 @@ void UEquationWidget::UpdateEquation(int x, int y, operand op)
 {
 	Var1->SetText(FText::FromString(FString::FromInt(x)));
 	Var2->SetText(FText::FromString(FString::FromInt(y)));
+	
 	FString opString = "";
 	switch (op) {
 	case addition:
@@ -45,9 +46,10 @@ void UEquationWidget::UpdateEquation(int x, int y, operand op)
 		break;
 
 	case division:
-		opString = "/";
+		opString = UTF8_TO_TCHAR(u8"÷");
 		break;
 	}
+
 	Operator->SetText(FText::FromString(opString));
 
 	UE_LOG(LogTemp, Warning, TEXT("[Equation Widget] updating equation UI"));
