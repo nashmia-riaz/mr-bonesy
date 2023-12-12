@@ -134,6 +134,10 @@ void AMyGameManager::ResumePath()
     currentIteration++;
     isMoving = true;
     approachingPlanet = false;
+
+    //when we resume path, we reset the spline time so we miss on a spline point creation. this messes up the procedural generation
+    //so we will manually create one
+    CreateRandomPoint(currentPoint, true);
 }
 
 void AMyGameManager::PanViewToPlanet()
