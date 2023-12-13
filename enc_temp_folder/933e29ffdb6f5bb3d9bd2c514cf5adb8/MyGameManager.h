@@ -75,8 +75,6 @@ public:
 
 	void PanViewToPlanet();
 	void PanToPlayer();
-
-	void ValidateAnswer(FString answerGiven);
 	
 private:
 	int maxRand = 400; int minRand = 300;

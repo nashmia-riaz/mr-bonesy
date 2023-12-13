@@ -59,7 +59,5 @@ public:
 	void UpdateEquationUI(int var1, int var2, operand op);
 
 	void UpdateAnswerUI(FString ans);
-
-	void ResetEquationUI();
 	
 };

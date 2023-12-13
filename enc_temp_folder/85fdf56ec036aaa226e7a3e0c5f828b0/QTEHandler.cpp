@@ -65,3 +65,9 @@ void AQTEHandler::GenerateEquation()
 
 	currentAnswer = FString::FromInt(currentEquation->GetAnswer());
 }
+
+void AQTEHandler::ValidateAnswer(FString answerGiven)
+{
+	
+}
+

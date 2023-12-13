@@ -52,16 +52,10 @@ void UEquationWidget::UpdateEquation(int x, int y, operand op)
 
 	Operator->SetText(FText::FromString(opString));
 
+	UE_LOG(LogTemp, Warning, TEXT("[Equation Widget] updating equation UI"));
 }
 
 void UEquationWidget::UpdateAnswer(FString ans)
 {
 	Answer->SetText(FText::FromString(ans));
-}
-
-void UEquationWidget::ResetUI()
-{
-	Answer->SetText(FText::FromString("?"));
-	Var1->SetText(FText::FromString(""));
-	Var2->SetText(FText::FromString(""));
 }

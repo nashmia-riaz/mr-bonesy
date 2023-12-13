@@ -55,6 +55,4 @@ public:
 	void UpdateEquation(int x, int y, operand op);
 
 	void UpdateAnswer(FString ans);
-
-	void ResetUI();
 };

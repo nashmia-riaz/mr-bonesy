@@ -49,9 +49,8 @@ void AMyPlayerController::KeyPressed(FKey key)
 
 		//if both strings are now equal
 		if (gameManager->QTEHandler->currentAnswer.Len() == currentNumberInputString.Len()) {
-			gameManager->ValidateAnswer(currentNumberInputString);
+			gameManager->QTEHandler->ValidateAnswer(currentNumberInputString);
 			UE_LOG(LogTemp, Log, TEXT("Validating answers: %s with %s"),*gameManager->QTEHandler->currentAnswer, *currentNumberInputString);
-			currentNumberInputString.Empty();
 		}
 	}
 }

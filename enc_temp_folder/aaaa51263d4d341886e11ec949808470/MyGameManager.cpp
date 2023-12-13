@@ -135,8 +135,6 @@ void AMyGameManager::ResumePath()
     isMoving = true;
     approachingPlanet = false;
 
-    UIHandler->ResetEquationUI();
-
     //when we resume path, we reset the spline time so we miss on a spline point creation. this messes up the procedural generation
     //so we will manually create one
     CreateRandomPoint(currentPoint, true);
@@ -177,17 +175,6 @@ void AMyGameManager::PanToPlayer()
     animationController->onAnimationComplete.AddDynamic(this, &AMyGameManager::ResumePath);
 
     UIHandler->HideEquationUI();
-}
-
-void AMyGameManager::ValidateAnswer(FString answerGiven)
-{
-    if (answerGiven == QTEHandler->currentAnswer) {
-        RecalculatePath();
-        PanToPlayer();
-    }
-    else {
-        PanToPlayer();
-    }
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

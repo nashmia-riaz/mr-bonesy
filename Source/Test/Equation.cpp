@@ -1,3 +1,4 @@
+#include "Equation.h"
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -36,4 +37,9 @@ void Equation::SetEquation(int x, int y, operand opNew) {
 			answer = var1 / var2;
 			break;
 	}
+}
+
+int Equation::GetAnswer()
+{
+	return answer;
 }

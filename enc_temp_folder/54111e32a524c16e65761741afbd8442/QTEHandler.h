@@ -27,6 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void GenerateEquation();
+	void ValidateAnswer(FString answerGiven);
 
 	UPROPERTY(EditAnywhere)
 	AUIHandler* UIHandler;
