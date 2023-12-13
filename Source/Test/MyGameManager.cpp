@@ -60,7 +60,7 @@ void AMyGameManager::Tick(float DeltaTime)
         }
     }
     //when we reach the end of a spline, generate another spline by adding a point to our spline points data structure
-    if (currentTimeInSpline >= 1) {
+    if (currentTimeInSpline >= 1.00) {
         currentIteration++;
         currentTimeInSpline = 0;
         CreateRandomPoint(currentPoint, true);
