@@ -28,7 +28,6 @@ void AMyGameManager::BeginPlay()
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
-
 }
 
 // Called every frame
@@ -54,6 +53,7 @@ void AMyGameManager::Tick(float DeltaTime)
             isMoving = false;
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
+            AllowNumericalInput = true;
             PanViewToPlanet();
             currentTimeInSpline = 0.99;
             QTEHandler->GenerateEquation();
@@ -134,6 +134,7 @@ void AMyGameManager::ResumePath()
     currentIteration++;
     isMoving = true;
     approachingPlanet = false;
+    AllowNumericalInput = false;
 
     UIHandler->ResetEquationUI();
 
@@ -188,6 +189,12 @@ void AMyGameManager::ValidateAnswer(FString answerGiven)
     else {
         PanToPlayer();
     }
+}
+
+
+bool AMyGameManager::IsNumericalInputAllowed()
+{
+    return AllowNumericalInput;
 }
 
 void AMyGameManager::CreateRandomPoint(FVector point, bool shouldInitObs)

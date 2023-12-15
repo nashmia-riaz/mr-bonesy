@@ -77,8 +77,11 @@ public:
 	void PanToPlayer();
 
 	void ValidateAnswer(FString answerGiven);
+
+	bool IsNumericalInputAllowed();
 	
 private:
+	bool AllowNumericalInput = false;
 	int maxRand = 400; int minRand = 300;
 	FVector currentPoint = FVector(0, 0, 0);
 	

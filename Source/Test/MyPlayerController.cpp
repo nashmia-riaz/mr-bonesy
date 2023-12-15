@@ -39,19 +39,21 @@ void AMyPlayerController::KeyPressed(FKey key)
 {
 	FKey keyExpected;
 
-	//first we will check the input size with expected answer, only keep registering if string sizes is less or equal
-	if (gameManager->QTEHandler->currentAnswer.Len() > currentNumberInputString.Len()) {
-		//if the key pressed is one of the numbers
-		if (numbers.Contains(key)) {
-			RegisterKey(key);
-			UE_LOG(LogTemp, Log, TEXT("Key Pressed: %s"), *key.GetFName().ToString());
-		}
+	if (gameManager->IsNumericalInputAllowed()) {
+		//first we will check the input size with expected answer, only keep registering if string sizes is less or equal
+		if (gameManager->QTEHandler->currentAnswer.Len() > currentNumberInputString.Len()) {
+			//if the key pressed is one of the numbers
+			if (numbers.Contains(key)) {
+				RegisterKey(key);
+				UE_LOG(LogTemp, Log, TEXT("Key Pressed: %s"), *key.GetFName().ToString());
+			}
 
-		//if both strings are now equal
-		if (gameManager->QTEHandler->currentAnswer.Len() == currentNumberInputString.Len()) {
-			gameManager->ValidateAnswer(currentNumberInputString);
-			UE_LOG(LogTemp, Log, TEXT("Validating answers: %s with %s"),*gameManager->QTEHandler->currentAnswer, *currentNumberInputString);
-			currentNumberInputString.Empty();
+			//if both strings are now equal
+			if (gameManager->QTEHandler->currentAnswer.Len() == currentNumberInputString.Len()) {
+				gameManager->ValidateAnswer(currentNumberInputString);
+				UE_LOG(LogTemp, Log, TEXT("Validating answers: %s with %s"), *gameManager->QTEHandler->currentAnswer, *currentNumberInputString);
+				currentNumberInputString.Empty();
+			}
 		}
 	}
 }
