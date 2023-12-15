@@ -31,6 +31,7 @@ void AUIHandler::BeginPlay()
 	equationWidget = CreateWidget<UEquationWidget>(GetWorld(), equationWidget_BP);
 	equationWidget->AddToViewport();
 	equationWidget->SetIsEnabled(false);
+	ResetEquationUI();
 }
 
 // Called every frame
@@ -90,4 +91,15 @@ void AUIHandler::UpdateAnswerUI(FString ans)
 void AUIHandler::ResetEquationUI()
 {
 	equationWidget->ResetUI();
+	equationWidget->TimerBar->Percent = 1;
+}
+
+void AUIHandler::ResetAnswerUI()
+{
+	equationWidget->ResetAnswer();
+}
+
+void AUIHandler::UpdateEquationTimer(float timeLeftPercentage)
+{
+	equationWidget->TimerBar->SetPercent(timeLeftPercentage);
 }

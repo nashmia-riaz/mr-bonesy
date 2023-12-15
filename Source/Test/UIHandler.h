@@ -62,4 +62,7 @@ public:
 
 	void ResetEquationUI();
 	
+	void ResetAnswerUI();
+
+	void UpdateEquationTimer(float timeLeftPercentage);
 };

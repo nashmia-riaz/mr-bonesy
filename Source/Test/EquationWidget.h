@@ -43,6 +43,9 @@ public:
 	UPROPERTY(EditAnywhere, Transient, BlueprintReadOnly, Category = Animations, meta = (BindWidgetAnim))
 	UWidgetAnimation* FadeOut;
 
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* TimerBar;
+
 	FWidgetAnimationDynamicEvent OnFadeInFinished;
 	FWidgetAnimationDynamicEvent OnFadeOutFinished;
 
@@ -57,4 +60,6 @@ public:
 	void UpdateAnswer(FString ans);
 
 	void ResetUI();
+
+	void ResetAnswer();
 };

@@ -35,6 +35,16 @@ void AMyGameManager::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    if (isAnswering) {
+        currentTimer += DeltaTime;
+        UIHandler->UpdateEquationTimer((timerLimit - currentTimer) / timerLimit);
+        if (currentTimer >= timerLimit) {
+            isAnswering = false;
+            UIHandler->HideEquationUI();
+            PanToPlayer();
+        }
+    }
+
     if (!isMoving) return;
 
     currentTimeInSpline = currentTimeInSpline + DeltaTime * currentSpeed;
@@ -53,7 +63,8 @@ void AMyGameManager::Tick(float DeltaTime)
             isMoving = false;
             currentSpeed = 0;
             UIHandler->TriggerDangerUI(false);
-            AllowNumericalInput = true;
+            AllowNumericalInput = isAnswering = true;
+            
             PanViewToPlanet();
             currentTimeInSpline = 0.99;
             QTEHandler->GenerateEquation();
@@ -134,7 +145,8 @@ void AMyGameManager::ResumePath()
     currentIteration++;
     isMoving = true;
     approachingPlanet = false;
-    AllowNumericalInput = false;
+    AllowNumericalInput = isAnswering = false;
+    currentTimer = 0;
 
     UIHandler->ResetEquationUI();
 
@@ -187,7 +199,7 @@ void AMyGameManager::ValidateAnswer(FString answerGiven)
         PanToPlayer();
     }
     else {
-        PanToPlayer();
+        UIHandler->ResetAnswerUI();
     }
 }
 

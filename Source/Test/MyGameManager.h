@@ -80,6 +80,7 @@ public:
 
 	bool IsNumericalInputAllowed();
 	
+
 private:
 	bool AllowNumericalInput = false;
 	int maxRand = 400; int minRand = 300;
@@ -98,5 +99,9 @@ private:
 
 	int lastIterationOnPlanetCreated = 0; 
 	int iterationsBeforeNextPlanet = 3;
+	
+	float timerLimit = 15;
+	float currentTimer = 0;
+	bool isAnswering = false;
 
 };

@@ -65,3 +65,8 @@ void UEquationWidget::ResetUI()
 	Var1->SetText(FText::FromString(""));
 	Var2->SetText(FText::FromString(""));
 }
+
+void UEquationWidget::ResetAnswer()
+{
+	Answer->SetText(FText::FromString("?"));
+}
