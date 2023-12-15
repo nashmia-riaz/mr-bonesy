@@ -42,6 +42,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Transient, BlueprintReadOnly, Category = Animations, meta = (BindWidgetAnim))
 	UWidgetAnimation* FadeOut;
+	
+	UPROPERTY(EditAnywhere, Transient, Category = Animations, meta = (BindWidgetAnim))
+	UWidgetAnimation* CameraShake;
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* TimerBar;
@@ -62,4 +65,6 @@ public:
 	void ResetUI();
 
 	void ResetAnswer();
+
+	void ShakeUI();
 };

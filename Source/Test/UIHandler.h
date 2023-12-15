@@ -65,4 +65,6 @@ public:
 	void ResetAnswerUI();
 
 	void UpdateEquationTimer(float timeLeftPercentage);
+
+	void ShakeEquationUI();
 };

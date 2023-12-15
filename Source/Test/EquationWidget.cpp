@@ -70,3 +70,8 @@ void UEquationWidget::ResetAnswer()
 {
 	Answer->SetText(FText::FromString("?"));
 }
+
+void UEquationWidget::ShakeUI()
+{
+	PlayAnimation(CameraShake, 0, 1, EUMGSequencePlayMode::Forward, 1, true);
+}

@@ -199,6 +199,13 @@ void AMyGameManager::ValidateAnswer(FString answerGiven)
         PanToPlayer();
     }
     else {
+        if (cameraShakeWrongAnswer_BP) {
+            UCameraComponent* camera = myPlayer->GetComponentByClass<UCameraComponent>();
+            UGameplayStatics::PlayWorldCameraShake(GetWorld(), cameraShakeWrongAnswer_BP, camera->GetComponentLocation(), (double)0, 500, 1, false);
+            UIHandler->ShakeEquationUI();
+        }
+        else UE_LOG(LogTemp, Error, TEXT("[Game Manager] No camera shake defined"));
+        
         UIHandler->ResetAnswerUI();
     }
 }

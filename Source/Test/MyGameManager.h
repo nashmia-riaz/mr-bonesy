@@ -80,6 +80,8 @@ public:
 
 	bool IsNumericalInputAllowed();
 	
+	UPROPERTY(EditANywhere, BlueprintReadWrite)
+	TSubclassOf<UCameraShakeBase> cameraShakeWrongAnswer_BP;
 
 private:
 	bool AllowNumericalInput = false;

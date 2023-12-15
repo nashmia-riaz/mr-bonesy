@@ -103,3 +103,8 @@ void AUIHandler::UpdateEquationTimer(float timeLeftPercentage)
 {
 	equationWidget->TimerBar->SetPercent(timeLeftPercentage);
 }
+
+void AUIHandler::ShakeEquationUI()
+{
+	equationWidget->ShakeUI();
+}
