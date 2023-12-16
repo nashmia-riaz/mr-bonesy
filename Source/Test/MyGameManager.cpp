@@ -89,7 +89,14 @@ void AMyGameManager::Tick(float DeltaTime)
 
 void AMyGameManager::UpdateHealth(float currentHealth, float maxHealth)
 {
+    //update the UI for player health
     UIHandler->SetHealth(currentHealth / maxHealth);
+
+    //if player has died, stop moving them along the spline
+    if (currentHealth <= 0)
+    {
+        isMoving = false;
+    }
 }
 
 void AMyGameManager::RecalculatePath(APoint* point)

@@ -13,7 +13,7 @@ void APlanetScript::BeginPlay()
 {
 	Super::BeginPlay();
 	ApplyInitialRotation();
-	InitializeSphereCollision();
+	InitializeSphere();
 	InitializeGeoCollection();
 	GenerateRandomPlanetCollection();
 	InitializeFieldSystem();
@@ -48,29 +48,9 @@ void APlanetScript::ApplyInitialRotation()
 	}
 }
 
-void APlanetScript::OnTriggerCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APlanetScript::InitializeSphere()
 {
-	if (OtherActor && (OtherActor != this) && OtherComp) {
-		//if the planet collides with player, we will shatter the planet and eventually delete the pieces
-		if (OtherActor->ActorHasTag("Player"))
-		{
-			ExplodeMesh();
-		}
-		else if (OtherActor->ActorHasTag("PlayerOuter")) {
-			DestroyAfterDelay(30);
-		}
-	}
-}
-
-void APlanetScript::InitializeSphereCollision()
-{
-	sphereCollision = this->FindComponentByClass<USphereComponent>();
-	if (sphereCollision) {
-		sphereCollision->OnComponentBeginOverlap.AddDynamic(this, &APlanetScript::OnTriggerCollision);
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("[Planet Script] Could not find sphere collision component."));
-	}
+	sphereCollision = FindComponentByClass<USphereComponent>();
 }
 
 void APlanetScript::InitializeGeoCollection()
@@ -91,10 +71,7 @@ void APlanetScript::ExplodeMesh()
 	}
 	if (planetGeoCollection && fieldSystem) {
 		planetGeoCollection->SetSimulatePhysics(true);
-		/*UPrimitiveComponent* root = (UPrimitiveComponent*) planetGeoCollection;
-		root->SetSimulatePhysics(true);*/
-		//planetGeoCollection->SetSimulatePhysics(true);
-
+		
 		//apply an external strain to break the object
 		URadialFalloff* radialFalloff = NewObject<URadialFalloff>();
 		radialFalloff->SetRadialFalloff(10, 0, 1, 0, sphereCollision->GetScaledSphereRadius(), sphereCollision->GetComponentLocation(), Field_FallOff_None);
@@ -105,8 +82,6 @@ void APlanetScript::ExplodeMesh()
 		radialVector->SetRadialVector(100, sphereCollision->GetComponentLocation());
 		fieldSystem->ApplyPhysicsField(true, Field_LinearVelocity, NULL, radialVector);
 
-		//create an explosion emitter
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosionParticleEmitter, FTransform(GetActorLocation()), true, EPSCPoolMethod::None, true);
 		DestroyAfterDelay(30);
 	}
 }

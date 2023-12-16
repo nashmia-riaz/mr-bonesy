@@ -32,8 +32,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION(BlueprintCallable)
+	void OnOuterPlayerCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	UPROPERTY(EditAnywhere)
 	AMyGameManager* gameManager;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* explosionParticleEmitter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> PlayerShatteredBP;
 	
 private:
 	void PlayerTookDamage(float damage);
@@ -46,4 +55,6 @@ private:
 
 	UCameraComponent* camera;
 	bool isAnimatingCamera = false;
+
+	void ExplodePlayer();
 };

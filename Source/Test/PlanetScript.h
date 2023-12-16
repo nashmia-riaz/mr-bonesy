@@ -33,12 +33,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* explosionParticleEmitter;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UGeometryCollection*> planetGeoCollections;
 
+	void ExplodeMesh();
+	void DestroyAfterDelay(float delay);
 private:
 	bool isSetToBeDestroyed = false;
 	
@@ -49,16 +48,12 @@ private:
 
 
 	USphereComponent* sphereCollision;
-	UFUNCTION()
-	void OnTriggerCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	void InitializeSphereCollision();
+	void InitializeSphere();
 
 	UGeometryCollectionComponent* planetGeoCollection;
 	void InitializeGeoCollection();
 	void InitializeFieldSystem();
 	UFieldSystemComponent* fieldSystem;
-	void ExplodeMesh();
-	void DestroyAfterDelay(float delay);
 	void Destroy();
 
 };
