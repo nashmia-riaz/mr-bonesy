@@ -9,10 +9,11 @@ void UEquationWidget::NativeOnInitialized()
 
 	OnFadeInFinished.BindDynamic(this, &UEquationWidget::ExecuteOnFadeInFinished);
 	OnFadeOutFinished.BindDynamic(this, &UEquationWidget::ExecuteOnFadeOutFinished);
+	OnShakeFinished.BindDynamic(this, &UEquationWidget::ExecuteOnShakeFinished);
 
 	BindToAnimationFinished(FadeIn, OnFadeInFinished);
 	BindToAnimationFinished(FadeOut, OnFadeOutFinished);
-
+	BindToAnimationFinished(CameraShake, OnShakeFinished);
 }
 
 void UEquationWidget::ExecuteOnFadeInFinished()
@@ -24,6 +25,11 @@ void UEquationWidget::ExecuteOnFadeOutFinished()
 {
 	StopAnimation(AnswerHighlight);
 	this->SetIsEnabled(false);
+}
+
+void UEquationWidget::ExecuteOnShakeFinished()
+{
+	PlayAnimation(AnswerHighlight, 0, 0, EUMGSequencePlayMode::Forward, 1, true);
 }
 
 void UEquationWidget::UpdateEquation(int x, int y, operand op)
@@ -73,5 +79,6 @@ void UEquationWidget::ResetAnswer()
 
 void UEquationWidget::ShakeUI()
 {
+	StopAnimation(AnswerHighlight);
 	PlayAnimation(CameraShake, 0, 1, EUMGSequencePlayMode::Forward, 1, true);
 }

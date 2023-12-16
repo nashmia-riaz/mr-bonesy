@@ -51,12 +51,16 @@ public:
 
 	FWidgetAnimationDynamicEvent OnFadeInFinished;
 	FWidgetAnimationDynamicEvent OnFadeOutFinished;
+	FWidgetAnimationDynamicEvent OnShakeFinished;
 
 	UFUNCTION()
 	void ExecuteOnFadeInFinished();
 
 	UFUNCTION()
 	void ExecuteOnFadeOutFinished();
+
+	UFUNCTION()
+	void ExecuteOnShakeFinished();
 
 	void UpdateEquation(int x, int y, operand op);
 

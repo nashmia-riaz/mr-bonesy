@@ -103,7 +103,9 @@ private:
 	int iterationsBeforeNextPlanet = 3;
 	
 	float timerLimit = 15;
-	float currentTimer = 0;
+	float timerCount = 0;
 	bool isAnswering = false;
 
+	FTimerHandle CameraShakeTimerHandle;
+	void OnCameraShakeTimer();
 };

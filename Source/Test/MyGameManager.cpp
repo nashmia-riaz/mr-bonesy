@@ -36,10 +36,11 @@ void AMyGameManager::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     if (isAnswering) {
-        currentTimer += DeltaTime;
-        UIHandler->UpdateEquationTimer((timerLimit - currentTimer) / timerLimit);
-        if (currentTimer >= timerLimit) {
+        timerCount += DeltaTime;
+        UIHandler->UpdateEquationTimer((timerLimit - timerCount) / timerLimit);
+        if (timerCount >= timerLimit) {
             isAnswering = false;
+            GetWorldTimerManager().ClearTimer(CameraShakeTimerHandle);
             UIHandler->HideEquationUI();
             PanToPlayer();
         }
@@ -49,7 +50,6 @@ void AMyGameManager::Tick(float DeltaTime)
 
     currentTimeInSpline = currentTimeInSpline + DeltaTime * currentSpeed;
 
-    //currentTimeInSpline = (UGameplayStatics::GetRealTimeSeconds(GetWorld()) / currentSpeed) - currentIteration;  
     FVector position = CatmullRom(splinePoints[currentIteration]->position, splinePoints[currentIteration + 1]->position, splinePoints[currentIteration + 2]->position, splinePoints[currentIteration + 3]->position, currentTimeInSpline, 0);
 
     //as we are reaching the end of a spline, if the 3rd point refers to an obstacle, we will slow down to a stop
@@ -146,7 +146,7 @@ void AMyGameManager::ResumePath()
     isMoving = true;
     approachingPlanet = false;
     AllowNumericalInput = isAnswering = false;
-    currentTimer = 0;
+    timerCount = 0;
 
     UIHandler->ResetEquationUI();
 
@@ -194,6 +194,9 @@ void AMyGameManager::PanToPlayer()
 
 void AMyGameManager::ValidateAnswer(FString answerGiven)
 {
+    //if a camera shake is happening, we cannot validate answer
+    if (GetWorldTimerManager().IsTimerActive(CameraShakeTimerHandle)) return;
+
     if (answerGiven == QTEHandler->currentAnswer) {
         RecalculatePath();
         PanToPlayer();
@@ -203,10 +206,12 @@ void AMyGameManager::ValidateAnswer(FString answerGiven)
             UCameraComponent* camera = myPlayer->GetComponentByClass<UCameraComponent>();
             UGameplayStatics::PlayWorldCameraShake(GetWorld(), cameraShakeWrongAnswer_BP, camera->GetComponentLocation(), (double)0, 500, 1, false);
             UIHandler->ShakeEquationUI();
+
+            //diable input until camera shake is done
+            AllowNumericalInput = false;
+            GetWorld()->GetTimerManager().SetTimer(CameraShakeTimerHandle, this, &AMyGameManager::OnCameraShakeTimer, 1.0f, false);            
         }
         else UE_LOG(LogTemp, Error, TEXT("[Game Manager] No camera shake defined"));
-        
-        UIHandler->ResetAnswerUI();
     }
 }
 
@@ -273,6 +278,13 @@ int AMyGameManager::FindIndByPoint(APoint* point)
         }
     }
     return ind;
+}
+
+void AMyGameManager::OnCameraShakeTimer()
+{
+    UIHandler->ResetAnswerUI();
+    GetWorld()->GetTimerManager().ClearTimer(CameraShakeTimerHandle);
+    AllowNumericalInput = true;
 }
 
 float AMyGameManager::GetT(float t, float alpha, const FVector& p0, const FVector& p1)
