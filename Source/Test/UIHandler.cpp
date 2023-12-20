@@ -32,6 +32,18 @@ void AUIHandler::BeginPlay()
 	equationWidget->AddToViewport();
 	equationWidget->SetIsEnabled(false);
 	ResetEquationUI();
+
+	scoreWidget = CreateWidget<UScoreWidget>(GetWorld(), scoreWidget_BP);
+	scoreWidget->AddToViewport();
+	scoreWidget->SetIsEnabled(true);
+
+	gameOverWidget = CreateWidget <UGameOverWidget>(GetWorld(), gameOver_BP);
+	gameOverWidget->SetIsEnabled(false);
+	gameOverWidget->AddToViewport();
+
+	damageWidget = CreateWidget<UDamageWidget>(GetWorld(), damage_BP);
+	damageWidget->SetIsEnabled(true);
+	damageWidget->AddToViewport();
 }
 
 // Called every frame
@@ -107,4 +119,21 @@ void AUIHandler::UpdateEquationTimer(float timeLeftPercentage)
 void AUIHandler::ShakeEquationUI()
 {
 	equationWidget->ShakeUI();
+}
+
+void AUIHandler::UpdateScore(int score)
+{
+	scoreWidget->scoreText->SetText(FText::FromString("SCORE: " + FString::FromInt(score)));
+}
+
+void AUIHandler::TriggerGameOver(int score, int highscore) {
+	gameOverWidget->SetIsEnabled(true);
+	gameOverWidget->Score->SetText(FText::FromString("SCORE: " + FString::FromInt(score)));
+	gameOverWidget->Highscore->SetText(FText::FromString("HIGHSCORE: " + FString::FromInt(highscore)));
+	gameOverWidget->PlayAnimation(gameOverWidget->FadeIn, 0, 1, EUMGSequencePlayMode::Forward, 1, false);
+}
+
+void AUIHandler::TriggerDamageUI()
+{
+	damageWidget->PlayAnimation(damageWidget->FadeInOut, 0, 1, EUMGSequencePlayMode::Forward, 1, false);
 }

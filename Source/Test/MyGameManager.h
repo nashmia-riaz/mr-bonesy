@@ -13,6 +13,7 @@
 #include "UIHandler.h"
 #include "CustomCameraAnimator.h"
 #include "QTEHandler.h"
+#include "MyLocalPlayerSaveGame.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()
@@ -80,14 +81,19 @@ public:
 
 	bool IsNumericalInputAllowed();
 	
-	UPROPERTY(EditANywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UCameraShakeBase> cameraShakeWrongAnswer_BP;
+
+	UPROPERTY(VisibleAnywhere)
+	UMyLocalPlayerSaveGame* save;
 
 private:
 	bool AllowNumericalInput = false;
 	int maxRand = 400; int minRand = 300;
 	FVector currentPoint = FVector(0, 0, 0);
 	
+	float score = 0;
+
 	float simulationSpeed = 5;
 	bool isMoving = true;
 	bool approachingPlanet = false;
@@ -108,4 +114,5 @@ private:
 
 	FTimerHandle CameraShakeTimerHandle;
 	void OnCameraShakeTimer();
+
 };

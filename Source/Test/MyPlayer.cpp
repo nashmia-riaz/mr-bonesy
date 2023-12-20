@@ -15,7 +15,6 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!gameManager) UE_LOG(LogTemp, Error, TEXT("[Player] Please add reference to game manager object"));
 
 	camera = this->FindComponentByClass<UCameraComponent>();
 }
@@ -29,6 +28,8 @@ void AMyPlayer::Tick(float DeltaTime)
 
 void AMyPlayer::OnCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!gameManager) UE_LOG(LogTemp, Error, TEXT("[Player] Please add reference to game manager object"));
+
 	if (OtherActor && (OtherActor != this) && OtherComp) {
 		if (OtherActor->ActorHasTag("SplinePoint"))
 		{
@@ -73,6 +74,7 @@ void AMyPlayer::PlayerTookDamage(float damage)
 	}
 	
 	gameManager->UpdateHealth(currentHealth, maxHealth);
+	gameManager->UIHandler->TriggerDamageUI();
 }
 
 void AMyPlayer::RecalculateRoute(APoint* currentPoint)

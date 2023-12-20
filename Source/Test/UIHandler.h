@@ -9,6 +9,9 @@
 #include "DangerWidget.h"
 #include "EquationWidget.h"
 #include "Equation.h"
+#include "ScoreWidget.h"
+#include "GameOverWidget.h"
+#include "DamageWidget.h"
 #include "UIHandler.generated.h"
 
 UCLASS()
@@ -39,15 +42,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UDangerWidget> dangerWidget_BP;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDangerWidget* dangerWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UEquationWidget> equationWidget_BP;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UEquationWidget* equationWidget;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UScoreWidget> scoreWidget_BP;
+
+	UScoreWidget* scoreWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UGameOverWidget> gameOver_BP;
+
+	UGameOverWidget* gameOverWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UDamageWidget> damage_BP;
+
+	UDamageWidget* damageWidget;
+		
 	void TriggerDangerUI(bool enable);
 
 	UFUNCTION()
@@ -67,4 +83,10 @@ public:
 	void UpdateEquationTimer(float timeLeftPercentage);
 
 	void ShakeEquationUI();
+
+	void UpdateScore(int score);
+
+	void TriggerGameOver(int score, int highscore);
+
+	void TriggerDamageUI();
 };

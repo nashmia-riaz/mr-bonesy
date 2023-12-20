@@ -18,7 +18,7 @@ AMyGameManager::AMyGameManager()
 // Called when the game starts or when spawned
 void AMyGameManager::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
     currentTimeInSpline = currentIteration = 0;
     previousPosition = FVector(0, 0, 0);
@@ -28,6 +28,17 @@ void AMyGameManager::BeginPlay()
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
     CreateRandomPoint(currentPoint, false);
+
+    if (UGameplayStatics::DoesSaveGameExist(TEXT("PlayerSave"), 0))
+    {
+        save = Cast<UMyLocalPlayerSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSave"), 0));
+        UE_LOG(LogTemp, Log, TEXT("Loading from slot, highscore %f"), save->highscore);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Log, TEXT("Creating new slot"));
+        save = Cast<UMyLocalPlayerSaveGame>(UGameplayStatics::CreateSaveGameObject(UMyLocalPlayerSaveGame::StaticClass()));
+    }
 }
 
 // Called every frame
@@ -48,6 +59,8 @@ void AMyGameManager::Tick(float DeltaTime)
 
     if (!isMoving) return;
 
+    score += DeltaTime;
+    UIHandler->UpdateScore(score);
     currentTimeInSpline = currentTimeInSpline + DeltaTime * currentSpeed;
 
     FVector position = CatmullRom(splinePoints[currentIteration]->position, splinePoints[currentIteration + 1]->position, splinePoints[currentIteration + 2]->position, splinePoints[currentIteration + 3]->position, currentTimeInSpline, 0);
@@ -96,6 +109,16 @@ void AMyGameManager::UpdateHealth(float currentHealth, float maxHealth)
     if (currentHealth <= 0)
     {
         isMoving = false;
+
+        UE_LOG(LogTemp, Log, TEXT("Saving... score %f and highscore %f"), score, save->highscore);
+        if (score > save->highscore) {
+            save->highscore = score;
+            if (UGameplayStatics::SaveGameToSlot(save, TEXT("PlayerSave"), 0)) {
+                UE_LOG(LogTemp, Log, TEXT("Save successful"));
+            }
+        }
+
+        UIHandler->TriggerGameOver(score, save->highscore);
     }
 }
 
