@@ -69,7 +69,15 @@ void AMyGameManager::Tick(float DeltaTime)
     if (splinePoints[currentIteration + 2]->obsPointRef) {
         if (currentTimeInSpline > 0.5) {
             currentSpeed = FMath::Lerp(simulationSpeed, 0, (currentTimeInSpline - 0.5) / 0.5);
-            UIHandler->TriggerDangerUI(true);
+
+            if (!approachingPlanet)
+            {
+                UIHandler->TriggerDangerUI(true);
+                audioManager->StopUFOMusic();
+
+                approachingPlanet = true;
+            }
+        
         }
 
         if (currentTimeInSpline >= 0.95) {
@@ -96,7 +104,6 @@ void AMyGameManager::Tick(float DeltaTime)
     FRotator fRotator = facingVector.Rotation();
     myPlayer->SetActorRotation(fRotator, ETeleportType::None);
     previousPosition = position;
-    DrawDebugLine(GetWorld(), position, previousPosition, FColor::Red, true, -1, 0, 5);
 }
 
 
@@ -120,6 +127,8 @@ void AMyGameManager::UpdateHealth(float currentHealth, float maxHealth)
 
         UIHandler->TriggerGameOver(score, save->highscore);
     }
+
+    audioManager->PlayExplosionSound(myPlayer->GetActorLocation());
 }
 
 void AMyGameManager::RecalculatePath(APoint* point)
@@ -140,7 +149,6 @@ void AMyGameManager::RecalculatePath(APoint* point)
         FVector newPosition = targettedPoint->position + (facingBackwards * planetSize);
         targettedPoint->position = newPosition;
         targettedPoint->SetActorLocation(newPosition);
-        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Yellow, true, 0, 0, 5);
     
         //we also need to add a point that swerves around this planet now
         newPosition = oldPosition + facingRight * planetSize;
@@ -150,7 +158,6 @@ void AMyGameManager::RecalculatePath(APoint* point)
         splinePoint->SetActorLocation(newPosition);
         splinePoint->Initialize(newPosition, false, planetGenerator);
         splinePoints.Insert(splinePoint, insertAt);
-        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Cyan, true, 0, 0, 5);
 
         //lastly, we need to add a point in front of the planet so we completely bypass it
         newPosition = oldPosition + (-facingBackwards) * planetSize;
@@ -159,7 +166,6 @@ void AMyGameManager::RecalculatePath(APoint* point)
         splinePoint->SetActorLocation(newPosition);
         splinePoint->Initialize(newPosition, false, planetGenerator);
         splinePoints.Insert(splinePoint, insertAt + 1);
-        DrawDebugSphere(GetWorld(), newPosition, 5, 16, FColor::Cyan, true, 0, 0, 5);
     }
 }
 
@@ -179,6 +185,8 @@ void AMyGameManager::ResumePath()
     timerCount = 0;
 
     UIHandler->ResetEquationUI();
+
+    audioManager->PlayUFOSoundLooped();
 
     //when we resume path, we reset the spline time so we miss on a spline point creation. this messes up the procedural generation
     //so we will manually create one

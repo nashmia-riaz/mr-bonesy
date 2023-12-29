@@ -14,6 +14,7 @@
 #include "CustomCameraAnimator.h"
 #include "QTEHandler.h"
 #include "MyLocalPlayerSaveGame.h"
+#include "AudioManager.h"
 #include "MyGameManager.generated.h"
 
 UCLASS()
@@ -62,6 +63,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AQTEHandler* QTEHandler;
+
+	UPROPERTY(EditAnywhere)
+	AAudioManager* audioManager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float currentSpeed;
