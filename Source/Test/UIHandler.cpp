@@ -24,6 +24,13 @@ void AUIHandler::BeginPlay()
 	/*healthBarWidget = CreateWidget<UHealthBarWidget>(GetWorld(), HealthWidgetComponent_BP);
 	healthBarWidget->AddToViewport();*/
 
+	//transition from loading screen
+	ULoadingWidget* loading = CreateWidget<ULoadingWidget>(GetWorld(), loading_BP);
+	loading->RenderOpacity = 1;
+	loading->AddToViewport();
+	loading->SetIsEnabled(true);
+	loading->PlayAnimation(loading->FadeOut, 0, 1, EUMGSequencePlayMode::Forward, 1, false);
+
 	dangerWidget = CreateWidget<UDangerWidget>(GetWorld(), dangerWidget_BP);
 	dangerWidget->AddToViewport();
 	dangerWidget->SetIsEnabled(false);

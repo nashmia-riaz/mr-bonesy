@@ -12,6 +12,7 @@
 #include "ScoreWidget.h"
 #include "GameOverWidget.h"
 #include "DamageWidget.h"
+#include "LoadingWidget.h"
 #include "UIHandler.generated.h"
 
 UCLASS()
@@ -63,6 +64,9 @@ public:
 	TSubclassOf<UDamageWidget> damage_BP;
 
 	UDamageWidget* damageWidget;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ULoadingWidget> loading_BP;
 		
 	void TriggerDangerUI(bool enable);
 
